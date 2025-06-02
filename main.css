@@ -1,17 +1,483 @@
-.product-item {
-	background-color: gray;
-	display: inline-block;
-	height: 25px;
-	padding: 5px;
-	border-radius: 5px;
+:root {
+    --primary-bg-color: #dadada;
+    --secondary-bg-color: white;
+    --main-button-color: #3182CE;
+    --add-button-color: #21ba45;
+    --remove-button-color: #db2828;
+    --delete-button-color: #db2828;
+    --bought-status-color: #21ba45;
+    --not-bought-status-color: #f2f2f2;
+    --item-color: #f2711c;
+
+    --badge-main-color: #af01da;
+    --badge-hover-color: #4d01da;
+    --badge-text-color: white;
 }
 
-.amount {
-	background-color: yellow;
-	border-radius: 10px;
-	
-	display: inline-block;
-	height: 20px;
-	width: 20px;
-	text-align: center;
+body {
+    background-color: var(--primary-bg-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.left-panel,
+.right-panel {
+    background-color: var(--secondary-bg-color);
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px black;
+    flex: 1;
+    min-width: 380px;
+    max-width: 600px;
+}
+
+
+.input-add-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.item-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #CBD5E0;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.item-input:focus {
+    border-color: var(--main-button-color);
+}
+
+.add-item-btn {
+    padding: 10px 20px;
+    background-color: var(--main-button-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.add-item-btn:hover {
+    background-color: #2b6cb0;
+}
+
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #EDF2F7;
+    font-size: 16px;
+}
+
+.item-name {
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+#tomatoes {
+    text-decoration: line-through;
+}
+
+.item-name.editable-name {
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-sizing: border-box;
+    min-width: 80px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.remove-quantity {
+    background-color: var(--remove-button-color);
+}
+
+.remove-quantity:hover {
+    background-color: #C53030;
+}
+
+.add-quantity {
+    background-color: var(--add-button-color);
+}
+
+.add-quantity:hover {
+    background-color: #68D391;
+}
+
+.item-quantity-display {
+    min-width: 25px;
+    text-align: center;
+    font-weight: bold;
+    color: #4A5568;
+}
+
+.status-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.status-btn.bought {
+    background-color: var(--bought-status-color);
+    color: white;
+}
+
+.status-btn.bought:hover {
+    background-color: #38A169;
+}
+
+.status-btn.not-bought {
+    background-color: var(--not-bought-status-color);
+    color: #4A5568;
+    border: 1px solid #CBD5E0;
+}
+
+.status-btn.not-bought:hover {
+    background-color: #E2E8F0;
+    color: #2D3748;
+}
+
+.delete-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--delete-button-color);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+    margin-left: 5px;
+}
+
+.delete-btn:hover {
+    background-color: #C53030;
+}
+
+
+.right-panel .panel-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2D3748;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #EDF2F7;
+    padding-bottom: 10px;
+}
+
+.right-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.item-badge {
+    background-color: var(--not-bought-status-color);
+    color: black;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-quantity {
+    background-color: var(--item-color);
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/*
+- Бейджмає бутив лівому нижньому кутку
+- Бейджмає мати скругленіверхні кути
+- Бейджмає мати темнофіолетовий колір та білий шрифт
+
+- При наведенніна бейджвін має ПЛАВНО виїхати вгору
+- На частині яка з’явилася має бутинаписано чия це робота
+- Колір бейджу має змінитися
+*/
+.animated-badge {
+    position: fixed;
+    bottom: 0;
+    left: 20px;
+    width: 150px;
+    overflow: hidden;
+    transition: background-color 1s ease-out;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.badge-content {
+    background-color: var(--badge-main-color);
+    color: var(--badge-text-color);
+    padding: 12px 15px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+}
+
+.badge-hidden-content {
+    background-color: var(--badge-main-color);
+    color: var(--badge-text-color);
+    font-size: 14px;
+    text-align: center;
+    overflow: hidden;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s ease-out;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+}
+
+.animated-badge:hover {
+    background-color: var(--badge-hover-color);
+}
+
+.animated-badge:hover .badge-content {
+    background-color: var(--badge-hover-color);
+}
+
+.animated-badge:hover .badge-hidden-content {
+    height: 40px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: var(--badge-hover-color);
+}
+/* 
+    - Коли розмір екрану стає меншим за 500px колонки мають статиодна під одною
+    - Коли розмір збільшиться, вони маютьстати в дві колонки 
+*/
+@media (max-width: 500px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .leftPanel,
+    .rightPanel {
+        width: 95%;
+        margin: 10px 0;
+        min-width: unset;
+        max-width: unset;
+    }
+
+    .input-add-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .add-item-btn {
+        width: 100%;
+    }
+
+    .item-row {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .item-name {
+        flex-basis: 100%;
+        margin-bottom: 5px;
+    }
+
+    .quantity-controls,
+    .status-btn,
+    .delete-btn {
+        flex-shrink: 0;
+    }
+
+    .animated-badge {
+        left: 10px;
+        width: 130px;
+    }
+}
+
+/*  
+    - Під час вивдення на друк,	фон бейджу має стати білим, але має залишитись фіолетова обводка
+    - Замість напису BuyList має бути ім’я тогохто робив роботу 
+*/ 
+@media print {
+    body {
+        background-color: white;
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+
+    .left-panel, 
+    .right-panel { 
+        box-shadow: none;
+        margin: 10px auto;
+        border: 1px solid #eee;
+        width: 90%;
+        max-width: 800px;
+        padding: 15px;
+    }
+
+    .input-add-container,
+    .quantity-controls,
+    .status-btn,
+    .delete-btn {
+        display: none !important;
+    }
+
+    .item-list .item-row {
+        justify-content: space-between;
+    }
+    .item-list .item-quantity-display {
+        display: inline-block;
+        font-weight: normal;
+        color: black;
+    }
+    .item-list .item-name {
+        flex-grow: 0;
+    }
+
+    .animated-badge {
+        position: static;
+        width: fit-content; 
+        min-width: 200px;
+        margin: 20px auto; 
+        transform: none !important; 
+        background-color: white !important; 
+        border: 2px solid var(--badge-main-color); 
+        box-shadow: none; 
+        overflow: visible; 
+        display: flex; 
+        flex-direction: row; 
+        border-radius: 8px; 
+        padding: 5px 10px; 
+        box-sizing: border-box;
+        height: auto; 
+        min-height: 40px; 
+        align-items: center; 
+        justify-content: center;
+    }
+
+    .animated-badge .badge-content {
+        background-color: white !important; 
+        color: black !important; 
+        border-radius: 0; 
+        padding: 8px 12px;
+        border-right: 1px solid #eee; 
+    }
+
+    
+    .animated-badge .badge-content .badge-text {
+        visibility: hidden; 
+        position: relative;
+    }
+
+    .animated-badge .badge-content .badge-text::after {
+        visibility: visible; 
+        content: "Бойчук Юлія"; 
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap; 
+    }
+
+    .animated-badge .badge-hidden-content {
+        display: none !important; 
+    }
+}
+
+/*
+- При наведенніна будь-яку кнопку, має вспливати підказка на фіолтевому фоні з круглимикутами.
+- Підказка має з’являтися плавно збільшуючись знизу. При забирання курсорупідказкамає плавно ховатись.
+- Текст підказки має братися із атрибуту HTML data-tooltip
+*/
+button {
+    cursor: pointer;
+    position: relative;
+}
+
+button::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.8);
+    opacity: 0;
+    background-color: var(--badge-main-color);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    font-size: 14px;
+
+}
+
+button:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
 }
