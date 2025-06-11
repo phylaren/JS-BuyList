@@ -9,9 +9,12 @@
     --not-bought-status-color: #f2f2f2;
     --item-color: #f2711c;
 
-    --badge-main-color: #af01da;
+    --badge-color: #af01da;
     --badge-hover-color: #4d01da;
-    --badge-text-color: white;
+    --badge-main-color: #af01da; 
+
+    --border-radius-px: 5px;
+    --shadow: 0.7vh 0.7vh 0.9vh grey;
 }
 
 body {
@@ -37,7 +40,6 @@ body {
     min-width: 380px;
     max-width: 600px;
 }
-
 
 .input-add-container {
     display: flex;
@@ -82,7 +84,7 @@ body {
 
 .item-row {
     display: grid;
-	grid-template-columns:1fr  1fr  1fr;
+    grid-template-columns: 1fr auto auto; 
     align-items: center;
     gap: 10px;
     padding: 12px 0;
@@ -90,26 +92,36 @@ body {
     font-size: 16px;
 }
 
-.buttons{
-	display: flex;
-	justify-self: end;
+.item-row:last-child {
+    border-bottom: none;
+}
+
+.buttons {
+    display: flex;
+    justify-self: end;
+    gap: 5px; 
 }
 
 .item-name {
     flex-grow: 1;
     font-weight: 500;
+    cursor: pointer;
 }
 
-#tomatoes {
+.item-row.is-bought .item-name { 
     text-decoration: line-through;
+    color: #888;
 }
 
-.item-name.editable-name {
+.item-input-edit { 
+    flex-grow: 1;
     padding: 0;
-    border: 1px solid transparent;
+    border: 1px solid var(--main-button-color);
     border-radius: 3px;
     box-sizing: border-box;
     min-width: 80px;
+    font-size: 1.1em;
+    font-family: inherit;
 }
 
 .quantity-controls {
@@ -133,11 +145,20 @@ body {
     transition: background-color 0.2s ease;
 }
 
+.quantity-btn:hover:not(:disabled) {
+    background-color: #0056b3; 
+}
+
+.quantity-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
 .remove-quantity {
     background-color: var(--remove-button-color);
 }
 
-.remove-quantity:hover {
+.remove-quantity:hover:not(:disabled) {
     background-color: #C53030;
 }
 
@@ -145,7 +166,7 @@ body {
     background-color: var(--add-button-color);
 }
 
-.add-quantity:hover {
+.add-quantity:hover:not(:disabled) {
     background-color: #68D391;
 }
 
@@ -167,7 +188,7 @@ body {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.status-btn.bought {
+.status-btn.bought { 
     background-color: var(--bought-status-color);
     color: white;
 }
@@ -176,7 +197,7 @@ body {
     background-color: #38A169;
 }
 
-.status-btn.not-bought {
+.status-btn.not-bought { 
     background-color: var(--not-bought-status-color);
     color: #4A5568;
     border: 1px solid #CBD5E0;
@@ -208,6 +229,10 @@ body {
     background-color: #C53030;
 }
 
+.item-row.is-bought .quantity-controls,
+.item-row.is-bought .delete-btn {
+    display: none;
+}
 
 .right-panel .panel-header {
     font-size: 18px;
@@ -245,74 +270,74 @@ body {
     padding: 2px 7px;
     font-size: 12px;
     font-weight: bold;
+    color: white;
 }
 
-/*
-- Бейджмає бутив лівому нижньому кутку
-- Бейджмає мати скругленіверхні кути
-- Бейджмає мати темнофіолетовий колір та білий шрифт
+[data-tooltip] {
+    position: relative;
+}
 
-- При наведенніна бейджвін має ПЛАВНО виїхати вгору
-- На частині яка з’явилася має бутинаписано чия це робота
-- Колір бейджу має змінитися
-*/
-.animated-badge {
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%; 
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.8); 
+    opacity: 0;
+    background-color: var(--badge-main-color); 
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px; 
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+    pointer-events: none; 
+    font-size: 14px;
+    z-index: 100; 
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1); 
+}
+
+.badge {
     position: fixed;
     bottom: 0;
-    left: 20px;
-    width: 150px;
-    overflow: hidden;
-    transition: background-color 1s ease-out;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.badge-content {
-    background-color: var(--badge-main-color);
-    color: var(--badge-text-color);
-    padding: 12px 15px;
+    left: 0;
+    margin-left: 1vw;
+    background-color: var(--badge-color);
+    color: var(--secondary-bg-color);
+    border-top-left-radius: var(--border-radius-px);
+    border-top-right-radius: var(--border-radius-px);
+    height: 7vh;
+    width: 15vh;
+    cursor: pointer;
+    font-size: large;
     font-weight: bold;
+    transition: all 0.7s ease;
+    box-shadow: var(--shadow);
+}
+
+.badge .creator-info {
+    opacity: 0;
+}
+
+.badge .badge-text,
+.badge .creator-info {
     text-align: center;
-    font-size: 18px;
+    padding-top: 1vh;
 }
 
-.badge-hidden-content {
-    background-color: var(--badge-main-color);
-    color: var(--badge-text-color);
-    font-size: 14px;
-    text-align: center;
-    overflow: hidden;
-    height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    transition: height 0.3s ease-out, padding 0.3s ease-out, background-color 0.3s ease-out;
-    padding-left: 15px;
-    padding-right: 15px;
-    box-sizing: border-box;
-}
-
-.animated-badge:hover {
+.badge:hover {
     background-color: var(--badge-hover-color);
+    transition: all 0.7s ease;
+    height: 10vh;
 }
 
-.animated-badge:hover .badge-content {
-    background-color: var(--badge-hover-color);
+.badge:hover .creator-info {
+    opacity: 1;
 }
 
-.animated-badge:hover .badge-hidden-content {
-    height: 40px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    background-color: var(--badge-hover-color);
-}
-/* 
-    - Коли розмір екрану стає меншим за 500px колонки мають статиодна під одною
-    - Коли розмір збільшиться, вони маютьстати в дві колонки 
-*/
 @media (max-width: 500px) {
     body {
         flex-direction: column;
@@ -320,8 +345,8 @@ body {
         padding: 10px;
     }
 
-    .leftPanel,
-    .rightPanel {
+    .left-panel, 
+    .right-panel { 
         width: 95%;
         margin: 10px 0;
         min-width: unset;
@@ -338,9 +363,9 @@ body {
     }
 
     .item-row {
-        flex-wrap: wrap;
-        justify-content: space-between;
+        grid-template-columns: 1fr;
         gap: 5px;
+        align-items: flex-start;
     }
 
     .item-name {
@@ -349,31 +374,32 @@ body {
     }
 
     .quantity-controls,
+    .buttons { 
+        width: 100%;
+        justify-content: center; 
+    }
+
     .status-btn,
     .delete-btn {
         flex-shrink: 0;
     }
 
-    .animated-badge {
-        left: 10px;
-        width: 130px;
+    .delete-btn {
+        margin-left: 0; 
     }
 }
 
-/*  
-    - Під час вивдення на друк,	фон бейджу має стати білим, але має залишитись фіолетова обводка
-    - Замість напису BuyList має бути ім’я тогохто робив роботу 
-*/ 
+/* Print Styles */
 @media print {
     body {
-        background-color: white;
+        background-color: white !important; 
         display: block;
         padding: 0;
         margin: 0;
     }
 
-    .left-panel, 
-    .right-panel { 
+    .left-panel,
+    .right-panel {
         box-shadow: none;
         margin: 10px auto;
         border: 1px solid #eee;
@@ -391,54 +417,66 @@ body {
 
     .item-list .item-row {
         justify-content: space-between;
+        display: flex; 
+        gap: 0;
     }
+
     .item-list .item-quantity-display {
         display: inline-block;
         font-weight: normal;
         color: black;
+        margin-left: 10px;
     }
+
     .item-list .item-name {
         flex-grow: 0;
     }
 
-    .animated-badge {
+    .badge {
         position: static;
-        width: fit-content; 
+        width: fit-content;
         min-width: 200px;
-        margin: 20px auto; 
-        transform: none !important; 
+        margin: 20px auto;
+        transform: none !important;
         background-color: white !important; 
         border: 2px solid var(--badge-main-color); 
-        box-shadow: none; 
-        overflow: visible; 
-        display: flex; 
+        box-shadow: none;
+        overflow: visible;
+        display: flex;
         flex-direction: row; 
-        border-radius: 8px; 
-        padding: 5px 10px; 
+        border-radius: 8px;
+        padding: 5px 10px;
         box-sizing: border-box;
-        height: auto; 
-        min-height: 40px; 
-        align-items: center; 
+        height: auto;
+        min-height: 40px;
+        align-items: center;
         justify-content: center;
-    }
+        
+        .badge-text {
+            background-color: white;
+            color: black;
+            border-radius: 0;
+            padding: 8px 12px;
+            border-right: 1px solid #eee; 
+            white-space: nowrap;
+        }
 
-    .animated-badge .badge-content {
-        background-color: white !important; 
-        color: black !important; 
-        border-radius: 0; 
-        padding: 8px 12px;
-        border-right: 1px solid #eee; 
+        .creator-info {
+            opacity: 1 !important;
+            color: black;
+            padding-left: 10px; 
+            font-size: 1em !important; 
+        }
     }
-
     
-    .animated-badge .badge-content .badge-text {
-        visibility: hidden; 
+    .badge .badge-text {
+        visibility: hidden;
         position: relative;
     }
 
-    .animated-badge .badge-content .badge-text::after {
-        visibility: visible; 
-        content: "Бойчук Юлія"; 
+    .badge .badge-text::after {
+        visibility: visible;
+        content: "Бойчук Юлія";
         position: absolute;
         top: 0;
         left: 0;
@@ -447,43 +485,11 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        white-space: nowrap; 
+        white-space: nowrap;
+        color: black; 
     }
 
-    .animated-badge .badge-hidden-content {
+    .badge .creator-info {
         display: none !important; 
     }
-}
-
-/*
-- При наведенніна будь-яку кнопку, має вспливати підказка на фіолтевому фоні з круглимикутами.
-- Підказка має з’являтися плавно збільшуючись знизу. При забирання курсорупідказкамає плавно ховатись.
-- Текст підказки має братися із атрибуту HTML data-tooltip
-*/
-button {
-    cursor: pointer;
-    position: relative;
-}
-
-button::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px) scale(0.8);
-    opacity: 0;
-    background-color: var(--badge-main-color);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    white-space: nowrap;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    font-size: 14px;
-
-}
-
-button:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
 }
